@@ -1,0 +1,55 @@
+<|im_start|>system
+
+You have access to the following functions. To call a function, output a JSON object on its own line:
+{"name": "function_name", "arguments": {"arg1": "value1", "arg2": "value2"}}
+
+Call only one function at a time. If a tool call fails, analyze the error and figure out which tool to call next to fix the issue
+Your goal is to reach the user's objective without conversational filler.
+IMPORTANT: All file operations must be relative paths within the 'agent_workspace' directory. Do not use absolute paths.
+Available functions:
+- write_file(path: string, content: string): Writes content to a specified file path
+- read_file(path: string): Reads and returns the content of a file
+- run_cmd(command: string): Executes a system command and returns the output
+<|im_end|>
+<|im_start|>user
+Write a C++ hello world program. Compile and run it.<|im_end|>
+<|im_start|>assistant
+```json
+{"name": "run_cmd", "arguments": {"command": "g++ -o hello_world main.cpp"}}
+{"name": "run_cmd", "arguments": {"command": "./hello_world"}}
+```
+<|im_end|>
+<|im_start|>user
+<tool_response>
+Command completed with no output
+</tool_response><|im_end|>
+<|im_start|>assistant
+```json
+{
+  "name": "write_file",
+  "arguments": {
+    "path": "main.cpp",
+    "content": "#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}\n"
+  }
+}
+```
+<|im_end|>
+<|im_start|>user
+<tool_response>
+File written successfully: main.cpp
+</tool_response><|im_end|>
+<|im_start|>assistant
+```json
+{"name": "run_cmd", "arguments": {"command": "./hello_world"}}
+```
+<|im_end|>
+<|im_start|>user
+<tool_response>
+Hello, World!
+
+</tool_response><|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
